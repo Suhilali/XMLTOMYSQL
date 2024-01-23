@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\export_Ngq;
+use App\Models\MainCategory;
 
 
 // Music::truncate(); //clear existing data
@@ -19,7 +19,8 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Route::get('/ToMySql', function () {
 
-    $file = "export_Ngq.xml";
+    MainCategory::truncate(); //clear existing data
+    $file = "C:\\xampp\\htdocs\\ExportShop\\routes\\export_Ngq.xml";
     $reader = new XMLReader();
     // or  die("Failed to open xml file!");
     if (!$reader->open($file)) {
@@ -30,10 +31,23 @@ Route::get('/ToMySql', function () {
 
     while ($reader->name === 'category') {
         $category1 = simplexml_import_dom($doc->importNode($reader->expand(), true));
-        echo "</br> Id" . $category1['id'] . "parentId" . $category1['parentId'];
+
+        $mainCategory = new MainCategory();
+        if ($category1['parentId'] == null) {
+            $mainCategory->id = $category1['id'];
+            $mainCategory->name = $category1;
+            //$mainCategory->save();
+            echo "</br> Id" . $mainCategory->id . "parentId" . $mainCategory->name;
+        }
+        // if ( $category1["parentId"] == "" ) {
+        //     
+
+        // }
+
+
         $reader->next('category');
     } //end while
 
     $reader->close();
-    return "Hello from Conversion";
+    return "Hello from Conversion11111";
 });
