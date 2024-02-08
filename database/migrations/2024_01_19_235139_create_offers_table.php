@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('offers', function (Blueprint $table) {
             $table->id();
+            $table->string('identifier');
             $table->string('name');
             $table->boolean('available');
             $table->string('url');
